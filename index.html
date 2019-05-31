@@ -335,7 +335,7 @@
 <li><p>A conversational UX that takes the user through a number of action steps in order to get access to the data. This is a web or native-mobile UI that takes your user through an onboarding experience.</p></li>
 <li><p>A Backend/server piece that consumes data the user has already consented for.</p></li>
 </ol>
-<h3 id='user-onboarding'>User onboarding</h3>
+<h2 id='user-onboarding'>User onboarding</h2>
 <p>The first thing to focus on is to offer your user a smooth onboarding experience. It may be a classic wizard with a step-by-step approach or a more inovative approach like chatbot or voice-based UIs.</p>
 
 <p>The <a href="#sessions-api">Sessions API</a> helps you implement such a UI. A session is very similar to what most of us know from web programming: an ordered sequence of steps that share the same state. Although this is a unified developer experience, each skill may have particular steps to implement.</p>
@@ -360,8 +360,10 @@
 </span></code></pre>
 <p>As we integrate more skills into the middleware, we&#39;ll be documenting the required steps for each case. The Sessions API is generic enough to support complex conversational UIs that involve multiple iterations, uploads, synchronous and asynchronous communication (eg: cases where the online session might be interrupted due to an offline verification).</p>
 
-<p><img src="images/finq_session.png" alt="image" /></p>
+<p>This diagram is an example for a two-step session, where each step has attachments (uploads).</p>
 
+<p><img src="images/finq_session.png" alt="image" /></p>
+<h3 id='detailed-flow'>Detailed flow</h3>
 <p>An oboarding session is triggered by a <code>HTTP POST</code> to the <code>/sessions</code> endpoint. It has to include three elements:</p>
 
 <ul>
