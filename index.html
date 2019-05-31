@@ -360,6 +360,8 @@
 </span></code></pre>
 <p>As we integrate more skills into the middleware, we&#39;ll be documenting the required steps for each case. The Sessions API is generic enough to support complex conversational UIs that involve multiple iterations, uploads, synchronous and asynchronous communication (eg: cases where the online session might be interrupted due to an offline verification).</p>
 
+<p><img src="images/finq_session.png" alt="image" /></p>
+
 <p>An oboarding session is triggered by a <code>HTTP POST</code> to the <code>/sessions</code> endpoint. It has to include three elements:</p>
 
 <ul>
@@ -377,7 +379,7 @@
 
 <ul>
 <li>a <code>session_id</code>: identifies the newly created session. You will use this to submit subsequent steps.</li>
-<li>a <code>nonce</code>: a temporary token safe to be used from a client app. You will use this to submit data in the next iteration - that would be step #1 into your session.</li>
+<li>a <code>nonce</code>: a temporary token safe to be used from a client app. You will use this to submit data in the next iteration - that would be step #1 into your session. Currently the nonce expires in 30 minutes.</li>
 <li>a <code>status</code>: an informative message</li>
 </ul>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
@@ -385,7 +387,9 @@
   </span><span class="s2">"session_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"7489fe74-a91d-4897-8895-cd5e05c0fc4b"</span><span class="p">,</span><span class="w">
   </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SESSION_CREATED"</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre><h1 id='catalog-api'>Catalog API</h1><h1 id='sessions-api'>Sessions API</h1><h1 id='aisp-apis'>AISP APIs</h1><h1 id='marketplace-apis'>Marketplace APIs</h1><h1 id='errors'>Errors</h1>
+</span></code></pre>
+<p>Now that the session is created, you can start submitting data specific to each skill. At each iteration you specify the <code>step</code> and provide the <code>nonce</code> retrieved from the previous one.</p>
+<h1 id='catalog-api'>Catalog API</h1><h1 id='sessions-api'>Sessions API</h1><h1 id='aisp-apis'>AISP APIs</h1><h1 id='marketplace-apis'>Marketplace APIs</h1><h1 id='errors'>Errors</h1>
 <aside class="notice">
 This error section is stored in a separate file in <code>includes/_errors.md</code>. Slate allows you to optionally separate out your docs into many files...just save them to the <code>includes</code> folder and add them to the top of your <code>index.md</code>'s frontmatter. Files are included in the order listed.
 </aside>
