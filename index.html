@@ -242,6 +242,14 @@
               </ul>
           </li>
           <li>
+            <a href="#guide" class="toc-h1 toc-link" data-title="Guide">Guide</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#user-onboarding" class="toc-h2 toc-link" data-title="User onboarding">User onboarding</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
             <a href="#catalog-api" class="toc-h1 toc-link" data-title="Catalog API">Catalog API</a>
           </li>
           <li>
@@ -265,9 +273,9 @@
       <div class="dark-box"></div>
       <div class="content">
         <h1 id='quick-start'>Quick start</h1>
-<p>Welcome to the Finqware API!</p>
+<p>Welcome to the <a href="https://www.finqware.com">Finqware</a> API!</p>
 
-<p>This alpha program is about learning and testing various Open Banking APIs.</p>
+<p>This alpha phase is about learning and testing various Open Banking APIs.</p>
 
 <ol>
 <li><a href='https://www.finqware.com/joinalpha'>Register</a> yourself (personal or company) as a <code>servicer</code></li>
@@ -280,7 +288,7 @@
 
 <p>Each API that we integrate into our middleware is a <code>skill</code>. Examples: an account information API from Bank X is a skill, a payment initiation service from Bank Y is another skill.</p>
 
-<p>With the initial releases, we&#39;ll focus on three skill types: account information, payment initiation and marketplace.</p>
+<p>With the initial releases, we&#39;ll focus on three skill types: account information, payment initiation and marketplace. As a roadmap item we&#39;re planning to introduce more utility such as customer care and skills related to resource management.</p>
 
 <p>Each skill comes in two flavors: production and sandbox. Test &amp; dev tenants will use sandbox skills.</p>
 <h3 id='account-information'>Account information</h3>
@@ -318,7 +326,20 @@
 <p>A servicer may register multiple tenant apps for different business cases or just for technical reasons (eg: test &amp; prod apps).</p>
 
 <p>For a granular access control and reporting, each tenant is required to register the list of skills it connects to.</p>
-<h2 id='security-model'>Security model</h2><h1 id='catalog-api'>Catalog API</h1><h1 id='sessions-api'>Sessions API</h1><h1 id='aisp-apis'>AISP APIs</h1><h1 id='marketplace-apis'>Marketplace APIs</h1><h1 id='errors'>Errors</h1>
+<h2 id='security-model'>Security model</h2><h1 id='guide'>Guide</h1>
+<p>This section is for <a href="#tenants">tenant</a> app developers who want to implement the base API (REST &amp; GraphQL). As a roadmap item, we&#39;ll provide open source SDKs to simplify this process.</p>
+
+<p>Implementing Finqware <a href="#skills">skills</a> is always centered around the <strong>end-user</strong> - the individual or institution who owns the data queried through the middleware. As a <a href="#tenants">tenant</a> app developer, you&#39;re implementing two aspects:</p>
+
+<ol>
+<li><p>A conversational UX that takes the user through a number of action steps in order to get access to the data. This is a web or native-mobile UI that takes your user through an onboarding experience.</p></li>
+<li><p>A Backend/server piece that consumes data the user has already consented for.</p></li>
+</ol>
+<h3 id='user-onboarding'>User onboarding</h3>
+<p>The first thing to focus on is to offer your user a smooth onboarding experience. It may be a classic wizard with a step-by-step approach or a more inovative approach like chatbot or a voice UI.</p>
+
+<p>The <a href="#sessions-api">Sessions API</a> helps you to implement such a UI.</p>
+<h1 id='catalog-api'>Catalog API</h1><h1 id='sessions-api'>Sessions API</h1><h1 id='aisp-apis'>AISP APIs</h1><h1 id='marketplace-apis'>Marketplace APIs</h1><h1 id='errors'>Errors</h1>
 <aside class="notice">
 This error section is stored in a separate file in <code>includes/_errors.md</code>. Slate allows you to optionally separate out your docs into many files...just save them to the <code>includes</code> folder and add them to the top of your <code>index.md</code>'s frontmatter. Files are included in the order listed.
 </aside>
