@@ -338,7 +338,27 @@
 <h3 id='user-onboarding'>User onboarding</h3>
 <p>The first thing to focus on is to offer your user a smooth onboarding experience. It may be a classic wizard with a step-by-step approach or a more inovative approach like chatbot or voice-based UIs.</p>
 
-<p>The <a href="#sessions-api">Sessions API</a> helps you to implement such a UI.</p>
+<p>The <a href="#sessions-api">Sessions API</a> helps you implement such a UI. A session is very similar to what most of us know from web programming: an ordered sequence of steps that share the same state. Although this is a unified developer experience, each skill may have particular steps to implement.</p>
+
+<p>Practical examples:</p>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"client_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{{client_id}}"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"nonce"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{{nonce_step1}}"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"skill"</span><span class="p">:</span><span class="w"> </span><span class="s2">"xyz_sbx_#3.0"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"step"</span><span class="p">:</span><span class="w"> </span><span class="s2">"init_and_upload"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"100000"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"period"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<ul>
+<li>getting the user consent for an account information skill is a one-step session (i.e. trigger the strong customer authentication process)</li>
+<li>selling a bank deposit product takes the user through multiple steps where the user may be required to submit information and upload data in separate steps due to inter-step dependencies.</li>
+</ul>
+
+<p>As we integrate more skills into the middleware, we&#39;ll be documenting the required steps for each case. The Sessions API is generic enough to support complex conversational UIs that involve multiple iterations, uploads, synchronous and asynchronous communication (eg: cases where the online session might be interrupted due to an offline verification).</p>
 <h1 id='catalog-api'>Catalog API</h1><h1 id='sessions-api'>Sessions API</h1><h1 id='aisp-apis'>AISP APIs</h1><h1 id='marketplace-apis'>Marketplace APIs</h1><h1 id='errors'>Errors</h1>
 <aside class="notice">
 This error section is stored in a separate file in <code>includes/_errors.md</code>. Slate allows you to optionally separate out your docs into many files...just save them to the <code>includes</code> folder and add them to the top of your <code>index.md</code>'s frontmatter. Files are included in the order listed.
