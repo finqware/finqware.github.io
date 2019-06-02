@@ -296,7 +296,7 @@
 
 <p>Use cases: wallet applications or enterprise systems that need to query for bank accounts and transaction reports.</p>
 <h3 id='payment-initiation'>Payment initiation</h3>
-<p>Based on PSD2 PISP APIs from various banks.</p>
+<p>Initially based on PSD2 PISP APIs from various banks.</p>
 
 <p>Use cases: merchants willing to accept payments through a direct account-to-account transfer bypassing classic payment schemes.</p>
 <h3 id='marketplace'>Marketplace</h3>
@@ -326,14 +326,79 @@
 <p>A servicer may register multiple tenant apps for different business cases or just for technical reasons (eg: test &amp; prod apps).</p>
 
 <p>For a granular access control and reporting, each tenant is required to register the list of skills it connects to.</p>
-<h2 id='security-model'>Security model</h2><h1 id='guide'>Guide</h1>
-<p>This section is for <a href="#tenants">tenant</a> app developers who want to implement the base API (REST &amp; GraphQL). As a roadmap item, we&#39;ll provide open source SDKs to simplify this process.</p>
+<h2 id='security-model'>Security model</h2>
+<p>The Finqware API is protected by a number of keys and tokens.</p>
 
-<p>Implementing Finqware <a href="#skills">skills</a> is always centered around the <strong>end-user</strong> - the individual or institution who owns the data queried through the middleware. As a <a href="#tenants">tenant</a> app developer, you&#39;re implementing two aspects:</p>
+<p>It is important to follow the best practice around where it&#39;s safe to store/use them. You can make an API call from a web application using the <code>client_id</code>, but use an <code>access_token</code> only from your server-side code. Currently, a generally accepted opinion among security experts is that you cannot safely store secrets in a client application.</p>
+
+<table><thead>
+<tr>
+<th>Token/key</th>
+<th>Client</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>client_id</td>
+<td>yes</td>
+<td>An identifier for a tenant app</td>
+</tr>
+<tr>
+<td>client_secret</td>
+<td>no</td>
+<td>A secret generated for each tenant app</td>
+</tr>
+<tr>
+<td>client_app_key</td>
+<td>yes</td>
+<td>Used to initate a user <a href="#user-onboarding">session</a></td>
+</tr>
+<tr>
+<td>temp_token</td>
+<td>yes</td>
+<td>A temporary token that can be exchanged for an access_token</td>
+</tr>
+<tr>
+<td>access_token</td>
+<td>no</td>
+<td>A permanent token authorizing access to user data</td>
+</tr>
+<tr>
+<td>credentials_id</td>
+<td>no</td>
+<td>Points to user data (eg: a bank account, an insurance)</td>
+</tr>
+</tbody></table>
+<h3 id='tenant-level-elements'>Tenant-level elements</h3>
+<p>Each tenant application will have three security elements associated with it:</p>
+
+<ul>
+<li>client_id</li>
+<li>client_secret</li>
+<li>client_app_key</li>
+</ul>
+
+<p>They do not expire, but can be refreshed using the developer&#39;s portal.</p>
+<h3 id='user-level-elements'>User-level elements</h3>
+<p>Taking a user through a <a href="#user-onboarding">session</a> is about obtaining consent to access their data (eg: an existing bank account), or creating new value for that user (eg: selling a new insurance). In both cases, there is at least one target object created at the middleware level.</p>
+
+<p>Finqware does not store data that identifies the owner, but we return a <code>credentials_id</code> that represents your acccess point to these objects.</p>
+
+<p>Practical example: for an account information skill backed by PSD2 AISP, a user may give their consent to access three bank accounts. In this case, your generated <code>credentials_id</code> will point to these three objects.</p>
+
+<p>An API call where <code>credentials_id</code> is specified, needs to be authorized by its respective <code>acccess_token</code>.</p>
+
+<p>Your user mai have multiple pairs of [<code>credentials_id</code>, <code>access_token</code>] depending on how many resources they decide to access through your app. Plan and design your user database considering this aspect.</p>
+
+<p><img src="images/credentials.png" alt="image" /></p>
+<h1 id='guide'>Guide</h1>
+<p>This section is for <a href="#tenants">tenant</a> app developers who want to implement the base API (REST &amp; GraphQL). We&#39;ll also make SDK&#39;s available, but the API endpoints will always remain open for those who need maximum flexibility.</p>
+
+<p>Implementing Finqware <a href="#skills">skills</a> is always centered around the <strong>end-user</strong> - that being the individual or institution who owns the data queried through the middleware. As a <a href="#tenants">tenant</a> app developer, you&#39;re implementing two aspects:</p>
 
 <ol>
 <li><p>A conversational UX that takes the user through a number of action steps in order to get access to the data. This is a web or native-mobile UI that takes your user through an onboarding experience.</p></li>
-<li><p>A Backend/server piece that consumes data the user has already consented for.</p></li>
+<li><p>A Backend/server piece that consumes data the user has already consented for in the previous step.</p></li>
 </ol>
 <h2 id='user-onboarding'>User onboarding</h2>
 <p>The first thing to focus on is to offer your user a smooth onboarding experience. It may be a classic wizard with a step-by-step approach or a more inovative approach like chatbot or voice-based UIs.</p>
