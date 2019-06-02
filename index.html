@@ -380,7 +380,9 @@
 
 <p>They do not expire, but can be refreshed using the developer&#39;s portal.</p>
 
-<p>As you&#39;ll notice in the developer&#39;s <a href="#guide">guide</a>, a user session ends with receiving a <code>temp_token</code>. The reason we&#39;re not sending the <code>access_token</code> directly is that we designed the session flow to be developed entirely in a web/mobile context. This choice also facilitates the use of client SDKs. Hence the middleware returns a temporary token that needs to be sent to your backend first and then exchanged for the final <code>access_token</code> via a server-to-Finqware API call. As a side note: we&#39;re also considering using a callback endpoint as an option, where Finqware calls an API endpoint provided by your server for the token exchange.</p>
+<p>As you&#39;ll notice in the developer&#39;s <a href="#guide">guide</a>, a user session ends with receiving a <code>temp_token</code>. The reason we&#39;re not sending the <code>access_token</code> directly is that we designed the session flow to be developed entirely in a web/mobile context. This choice also facilitates the future development of client SDKs. Hence the middleware returns a temporary token that needs to be sent to your backend first and then exchanged for the final <code>access_token</code> via a server-to-Finqware API call.</p>
+
+<p>As a side note: we&#39;re also considering introducing a callback endpoint as an option. Following the end of a session, Finqware would call an API endpoint provided by your server for the token exchange.</p>
 <h3 id='user-level-elements'>User-level elements</h3>
 <p>Taking a user through a <a href="#user-onboarding">session</a> is about obtaining consent to access their data (eg: an existing bank account), or creating new value for that user (eg: selling a new insurance). In both cases, there is at least one target object created at the middleware level.</p>
 
@@ -403,7 +405,7 @@
 <li><p>A Backend/server piece that consumes data the user has already consented for in the previous step.</p></li>
 </ol>
 <h2 id='user-onboarding'>User onboarding</h2>
-<p>The first thing to focus on is to offer your user a smooth onboarding experience. It may be a classic wizard with a step-by-step approach or a more inovative approach like chatbot or voice-based UIs.</p>
+<p>The first thing to focus on is to offer your user a smooth onboarding experience. You may design a classic wizard with a step-by-step approach or have a more inovative approach like chatbot or voice-based UIs.</p>
 
 <p>The <a href="#sessions-api">Sessions API</a> helps you implement such a UI. A session is very similar to what most of us know from web programming: an ordered sequence of steps that share the same state. Although this is a unified developer experience, each skill may have particular steps to implement.</p>
 
@@ -468,6 +470,17 @@
 <p>Use the <code>/steps/{step_id}/upload</code> endpoint to submit uploads for a specific step.</p>
 
 <p><img src="images/finq_session.png" alt="image" /></p>
+
+<p>In the above diagram please notice the moments where <code>nonce</code> for each step and the <code>temp_token</code> are generated.
+The nonce to be used for any API call related to step #1 is generated when the session is initialized. The nonce to be used for any API call related to step #2 is generated when step #1 data is submitted.</p>
+
+<p>The <a href="#security-model">temp_token</a> is generated when you submit data with the last step - in the example above, the session has two steps, hence it&#39;s generated with Step #2. This marks the end of a successful user session: user consent has been given or the product onboarding was done without any issue.</p>
+
+<p>This is an important point in this flow, as you need to make the switch to the server-side. The switch is made by sending the <code>temp_token</code> to your backend server. This is where you call the <code>/token</code> endpoint to exchange it for an <code>access_token</code> along with the <code>credentials_id</code> that points to the newly created object/s.</p>
+
+<p><img src="images/session_high_level.png" alt="image" /></p>
+
+<p>The call to <code>/token</code> is authenticated by using the <code>client_id</code> and <code>client_secret</code>. The <code>access_token</code> along with the <code>credentials_id</code> need to be stored by your backend along with the end-user data. Using these two elements you will request, for example, an updated transaction report for the bank account the user consented access for.</p>
 <h1 id='catalog-api'>Catalog API</h1><h1 id='sessions-api'>Sessions API</h1><h1 id='aisp-apis'>AISP APIs</h1><h1 id='marketplace-apis'>Marketplace APIs</h1><h1 id='errors'>Errors</h1>
 <aside class="notice">
 This error section is stored in a separate file in <code>includes/_errors.md</code>. Slate allows you to optionally separate out your docs into many files...just save them to the <code>includes</code> folder and add them to the top of your <code>index.md</code>'s frontmatter. Files are included in the order listed.
