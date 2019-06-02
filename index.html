@@ -379,6 +379,8 @@
 </ul>
 
 <p>They do not expire, but can be refreshed using the developer&#39;s portal.</p>
+
+<p>As you&#39;ll notice in the developer&#39;s <a href="#guide">guide</a>, a user session ends with receiving a <code>temp_token</code>. The reason we&#39;re not sending the <code>access_token</code> directly is that we designed the session flow to be developed entirely in a web/mobile context. This choice also facilitates the use of client SDKs. Hence the middleware returns a temporary token that needs to be sent to your backend first and then exchanged for the final <code>access_token</code> via a server-to-Finqware API call. As a side note: we&#39;re also considering using a callback endpoint as an option, where Finqware calls an API endpoint provided by your server for the token exchange.</p>
 <h3 id='user-level-elements'>User-level elements</h3>
 <p>Taking a user through a <a href="#user-onboarding">session</a> is about obtaining consent to access their data (eg: an existing bank account), or creating new value for that user (eg: selling a new insurance). In both cases, there is at least one target object created at the middleware level.</p>
 
