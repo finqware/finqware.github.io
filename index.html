@@ -483,7 +483,9 @@ The nonce to be used for any API call related to step #1 is generated when the s
 
 <p><img src="images/session_high_level.png" alt="image" /></p>
 
-<p>The call to <code>/token</code> is authenticated by using the <code>client_id</code> and <code>client_secret</code>. The <code>access_token</code> along with the <code>credentials_id</code> need to be stored by your backend along with the end-user data. Using these two elements you will request, for example, an updated transaction report for the bank account the user consented access for.</p>
+<p>The call to <code>/token</code> is authenticated by using the <code>client_id</code> and <code>client_secret</code>. The <code>access_token</code> plus the <code>credentials_id</code> need to be stored by your backend along with the end-user data. A super simple UML design for your database potentially looks like this:</p>
+
+<p><img src="images/tenant_design.png" alt="image" /></p>
 <h2 id='consuming-data'>Consuming data</h2>
 <p>Having the <code>access_token</code> and the <code>credentials_id</code> for a certain resource generated with the flow above, you can now start querying the data.</p>
 
