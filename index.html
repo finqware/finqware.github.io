@@ -250,6 +250,9 @@
                   <li>
                     <a href="#consuming-data" class="toc-h2 toc-link" data-title="Consuming data">Consuming data</a>
                   </li>
+                  <li>
+                    <a href="#designing-a-tenant-app" class="toc-h2 toc-link" data-title="Designing a tenant app">Designing a tenant app</a>
+                  </li>
               </ul>
           </li>
           <li>
@@ -483,15 +486,32 @@ The nonce to be used for any API call related to step #1 is generated when the s
 
 <p><img src="images/session_high_level.png" alt="image" /></p>
 
-<p>The call to <code>/token</code> is authenticated by using the <code>client_id</code> and <code>client_secret</code>. The <code>access_token</code> plus the <code>credentials_id</code> need to be stored by your backend along with the end-user data. A super simple UML design for your database potentially looks like this:</p>
-
-<p><img src="images/tenant_design.png" alt="image" /></p>
+<p>The call to <code>/token</code> is authenticated by using the <code>client_id</code> and <code>client_secret</code>. The <code>access_token</code> plus the <code>credentials_id</code> need to be stored by your backend along with the end-user data.</p>
 <h2 id='consuming-data'>Consuming data</h2>
 <p>Having the <code>access_token</code> and the <code>credentials_id</code> for a certain resource generated with the flow above, you can now start querying the data.</p>
 
 <p>This is specific for each skill. An account information skill would be used by querying the <code>/accounts</code> and <code>/transactions</code> API endpoints. We&#39;re also planning to release the GrapqhQL endpoints, including support for realtime subscriptions - currently in internal testing phase.</p>
 
 <p>At this stage, all the API calls should be done by your tenant&#39;s backend, authenticated with the tenant&#39;s <code>client_id</code> and <code>client_secret</code>.</p>
+<h2 id='designing-a-tenant-app'>Designing a tenant app</h2>
+<p>As mentioned before, building an application on top of Finqware means <strong>in general</strong> that you have to build a front-end (web/mobile) and a backend. It is unsafe to build a client-only app unless it will run on trusted devices.</p>
+
+<p>It will be possible to build your app entirely on the backend though. Here we&#39;re targeting enterprise applications.</p>
+<h3 id='the-front-end'>The front-end</h3>
+<p>The challenge here is to design how to keep state between <a href="#user-onboarding">Session</a> steps. State management in web/mobile apps has become a hot topic, especially since Facebook introduced the <a href="https://facebook.github.io/flux/">flux</a> pattern back in 2014. It&#39;s always a matter of taste and depends greatly on what programming language and framework you&#39;re using.</p>
+
+<p>The diagram below is a screenshot of a <a href="https://redux.js.org/">Redux</a> store used in our demo mobile app. The app, which we&#39;ll open source, is actually written with <a href="https://flutter.dev/">Flutter</a> and uses a port of Redux in <a href="https://dart.dev/">Dart</a>.
+In the example below, the client app has a central Redux state where we keep parameters related to the GUI (eg: <code>isLoading</code>) and pervasive data such as what we need for session/steps.</p>
+
+<p><img src="images/app_client_state.png" alt="image" /></p>
+
+<p>A 1st-level branch stores a list of <a href="#skills">skills</a> queried using the Catalog API. The other 1st-level branches are actual objects that store session/step data: <code>webdepo</code> is a bank deposit product and <code>aispSession</code> holds data for any skill based on PSD2 AISP.</p>
+<h3 id='the-backend'>The backend</h3>
+<p>A super simple UML design for your database potentially looks like this:</p>
+
+<p><img src="images/tenant_design.png" alt="image" /></p>
+
+<p>In the example above: an end-user would give you access to multiple financial assets by completing an onboarding session for each of them. Each asset has a pointer to the respective Finqware resource in the form of the pair [<code>finq_credentials_id</code>, <code>finq_access_token</code>]. It also has a number of transactions associated - if the asset is for example a credit card.</p>
 <h1 id='catalog-api'>Catalog API</h1><h1 id='sessions-api'>Sessions API</h1><h1 id='accounts-api'>Accounts API</h1><h1 id='transactions-api'>Transactions API</h1><h1 id='errors'>Errors</h1>
 <aside class="notice">
 This error section is stored in a separate file in <code>includes/_errors.md</code>. Slate allows you to optionally separate out your docs into many files...just save them to the <code>includes</code> folder and add them to the top of your <code>index.md</code>'s frontmatter. Files are included in the order listed.
