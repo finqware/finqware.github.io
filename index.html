@@ -499,8 +499,8 @@ The nonce to be used for any API call related to step #1 is generated when the s
 <h3 id='the-front-end'>The front-end</h3>
 <p>The challenge here is to design how to keep state between <a href="#user-onboarding">Session</a> steps. State management in web/mobile apps has become a hot topic, especially since Facebook introduced the <a href="https://facebook.github.io/flux/">flux</a> pattern back in 2014. It&#39;s always a matter of taste and depends greatly on what programming language and framework you&#39;re using.</p>
 
-<p>The diagram below is a screenshot of a <a href="https://redux.js.org/">Redux</a> store used in our demo mobile app. The app, which we&#39;ll open source, is actually written with <a href="https://flutter.dev/">Flutter</a> and uses a port of Redux in <a href="https://dart.dev/">Dart</a>.
-In the example below, the client app has a central Redux state where we keep parameters related to the GUI (eg: <code>isLoading</code>) and pervasive data such as what we need for session/steps.</p>
+<p>The diagram below is a screenshot of a <a href="https://redux.js.org/">Redux</a> store used in our demo mobile app. The app, is actually written with <a href="https://flutter.dev/">Flutter</a> and uses a port of <a href="https://redux.js.org/">Redux</a> in <a href="https://dart.dev/">Dart</a>.
+In the example below, the client app has a central <a href="https://redux.js.org/">Redux</a> state where we keep parameters related to the GUI (eg: <code>isLoading</code>) and pervasive data such as what we need for session/steps.</p>
 
 <p><img src="images/app_client_state.png" alt="image" /></p>
 
